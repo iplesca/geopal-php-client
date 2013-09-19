@@ -24,18 +24,21 @@ class Client
     const API_URL = 'https://app.geopalsolutions.com/api/';
 
     /**
-     * @param int $employeeId
-     * @param string $privateKey
+     * @param $employeeId
+     * @param $privateKey
+     * @param null|\Guzzle\Http\Client $guzzleClient
      */
-    public function __construct($employeeId, $privateKey)
+    public function __construct($employeeId, $privateKey, $guzzleClient = null)
     {
         $this->employeeId = $employeeId;
         $this->privateKey = $privateKey;
-        $this->guzzleClient = new GuzzleClient(self::API_URL);
+        if (is_null($guzzleClient)) {
+            $this->guzzleClient = new GuzzleClient(self::API_URL);
+        }
     }
 
-    public function get($params = array())
+    public function get($uri, $params = array())
     {
-
+        $this->guzzleClient->get($uri . '?' . http_build_query($params), array());
     }
 }
