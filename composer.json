@@ -1,6 +1,11 @@
 {
-    "name": "GeoPalSolutions/GeoPal",
+    "name": "GeoPal PHP Client",
     "require": {
-
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "Geopal\\": "src/"
+        }
     }
 }
