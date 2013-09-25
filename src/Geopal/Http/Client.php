@@ -24,7 +24,7 @@ class Client
     /**
      * Geopal API Url
      */
-    const API_URL = 'https://app.geopalsolutions.com/api/';
+    const API_URL = 'https://app.geopalsolutions.com/';
 
     /**
      * @param $employeeId
@@ -59,7 +59,7 @@ class Client
      */
     public function post($uri, $params = array())
     {
-        return $this->guzzleClient->post($uri, $this->getHeaders('get', $uri), $params)->send();
+        return $this->guzzleClient->post($uri, $this->getHeaders('post', $uri), $params)->send();
     }
 
     /**
@@ -69,7 +69,7 @@ class Client
      */
     public function put($uri, $params = array())
     {
-        return $this->guzzleClient->put($uri, $this->getHeaders('get', $uri), $params)->send();
+        return $this->guzzleClient->put($uri, $this->getHeaders('put', $uri), $params)->send();
     }
 
     /**
