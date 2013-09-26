@@ -1,11 +1,13 @@
 <?php
-namespace Geoapl\Tests;
+namespace Geopal\Tests;
 
 use Geopal\Geopal as GeoPal;
 use Geopal\Http\Client as GeoPalClient;
 use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Plugin\Mock\MockPlugin;
 use Guzzle\Http\Message\Response;
+
+require_once 'GeopalMock.php';
 
 class GeopalTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,27 +18,27 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     public $geoPal;
 
     /**
-     * @var GeopalTest
+     * @var int
      */
-    private $template_id;
+    private $templateId;
 
     /**
-     * @var GeopalTest
+     * @var int
      */
     private $employeeId;
 
     /**
-     * @var GeopalTest
+     * @var int
      */
-    private $job_id;
+    private $jobId;
 
     /**
-     * @var GeopalTest
+     * @var string
      */
     private $dateTimeFrom;
 
     /**
-     * @var GeopalTest
+     * @var string
      */
     private $dateTimeTo;
 
@@ -46,32 +48,36 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->geoPal = new GeoPal();
+
         $this->setTemplateId(29);
         $this->setEmployeeId(2);
         $this->setJobId(226226);
         $this->setDateTimeFrom('2013-01-01 00:00');
         $this->setDateTimeTo('2013-12-31 00:00');
+
+        $this->geoPal = new GeopalMock($this->getEmployeeId(), 'secret_key');
+        $this->assertEquals(true, is_object($this->geoPal));
+        $this->assertEquals(true, $this->geoPal instanceof GeopalMock ? true : false);
     }
 
     /**
-     * @param \Geoapl\Tests\GeopalTest $template_id
+     * @param int $templateId
      */
-    public function setTemplateId($template_id)
+    public function setTemplateId($templateId)
     {
-        $this->template_id = $template_id;
+        $this->templateId = $templateId;
     }
 
     /**
-     * @return \Geoapl\Tests\GeopalTest
+     * @return int
      */
     public function getTemplateId()
     {
-        return $this->template_id;
+        return $this->templateId;
     }
 
     /**
-     * @param \Geoapl\Tests\GeopalTest $employeeId
+     * @param int $employeeId
      */
     public function setEmployeeId($employeeId)
     {
@@ -79,7 +85,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Geoapl\Tests\GeopalTest
+     * @return int
      */
     public function getEmployeeId()
     {
@@ -87,23 +93,23 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Geoapl\Tests\GeopalTest $job_id
+     * @param int $jobId
      */
-    public function setJobId($job_id)
+    public function setJobId($jobId)
     {
-        $this->job_id = $job_id;
+        $this->jobId = $jobId;
     }
 
     /**
-     * @return \Geoapl\Tests\GeopalTest
+     * @return int
      */
     public function getJobId()
     {
-        return $this->job_id;
+        return $this->jobId;
     }
 
     /**
-     * @param \Geoapl\Tests\GeopalTest $dateTimeFrom
+     * @param string $dateTimeFrom
      */
     public function setDateTimeFrom($dateTimeFrom)
     {
@@ -111,7 +117,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Geoapl\Tests\GeopalTest
+     * @return string
      */
     public function getDateTimeFrom()
     {
@@ -119,7 +125,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Geoapl\Tests\GeopalTest $dateTimeTo
+     * @param string $dateTimeTo
      */
     public function setDateTimeTo($dateTimeTo)
     {
@@ -127,12 +133,14 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Geoapl\Tests\GeopalTest
+     * @return string
      */
     public function getDateTimeTo()
     {
         return $this->dateTimeTo;
     }
+
+
 
     /**
      * tests getJobTemplates()
@@ -171,11 +179,11 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         $job = $this->geoPal->createAndAssignJob($this->getTemplateId());
         $this->assertEquals(
             true,
-            is_array($job['job'])
+            is_array($job)
         );
         $this->assertEquals(
             $this->getTemplateId(),
-            $job['job']['job_template']['id']
+            $job['job_template']['id']
         );
     }
 
@@ -196,6 +204,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
     /**
      * tests testGetJobsBetweenDateRange() with json output
      */
@@ -208,6 +217,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
             is_array($job)
         );
     }
+
 
     /**
      * tests getEmployeesList() with json output

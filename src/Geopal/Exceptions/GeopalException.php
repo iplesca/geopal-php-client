@@ -2,7 +2,7 @@
 
 namespace Geopal\Exceptions;
 
-class GeopalExceptions extends \Exception
+class GeopalException extends \Exception
 {
     /**
      * @param string $message
@@ -25,5 +25,10 @@ class GeopalExceptions extends \Exception
     public function noPropertyFound()
     {
         echo "No property found";
+    }
+
+    public function noSuccessProperty()
+    {
+        echo "There is no success property";
     }
 }

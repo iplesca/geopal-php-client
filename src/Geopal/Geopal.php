@@ -1,26 +1,33 @@
 <?php
 
+/**
+ *
+ */
 namespace Geopal;
 
 use Geopal\Http\Client;
-use Geopal\Exceptions\GeopalExceptions;
+use Geopal\Exceptions\GeopalException;
 
+/**
+ * Class Geopal
+ * @package Geopal
+ */
 class Geopal
 {
     /**
-     * @var
+     * @var int
      */
-    private $employeeId;
+    protected $employeeId;
 
     /**
-     * @var
+     * @var string
      */
-    private $privateKey;
+    protected $privateKey;
 
     /**
-     * @var
+     * @var Client
      */
-    private $client;
+    protected $client;
 
 
     /**
@@ -38,16 +45,18 @@ class Geopal
      * @param $array
      * @param $key
      * @return mixed
+     * @throws Exceptions\GeopalException
      */
-    private function checkPropertyAndReturn($array, $key)
+    protected function checkPropertyAndReturn($array, $key)
     {
-        if (is_array($array) && array_key_exists($key, $array)) {
-            try {
+        if (is_array($array) && array_key_exists($key, $array) && array_key_exists('status', $array)) {
+            if ($array['success'] == true) {
                 return $array[$key];
-            } catch (GeopalExceptions $e) {
-                $e->noPropertyFound();
+            } else {
+                throw new GeopalException($array['error_message'], $array['error_code']);
             }
-
+        } else {
+            throw new GeopalException('Invalid data or key not found');
         }
     }
 
@@ -95,7 +104,7 @@ class Geopal
     /**
      * @return string
      */
-    private function getPrivateKey()
+    protected function getPrivateKey()
     {
         return $this->privateKey;
     }
@@ -106,7 +115,8 @@ class Geopal
      */
     public function createAndAssignJob($template_id)
     {
-        return $this->client->post('api/jobs/createandassign', array('template_id'=>$template_id))->json();
+        $job = $this->client->post('api/jobs/createandassign', array('template_id' => $template_id))->json();
+        return $this->checkPropertyAndReturn($job, 'job');
     }
 
     /**
@@ -115,7 +125,7 @@ class Geopal
      */
     public function getJobById($jobId)
     {
-        $jobs =  $this->client->get('api/jobs/get', array('job_id'=>$jobId))->json();
+        $jobs = $this->client->get('api/jobs/get', array('job_id' => $jobId))->json();
         return $this->checkPropertyAndReturn($jobs, 'job');
     }
 
@@ -126,9 +136,9 @@ class Geopal
      */
     public function getJobsBetweenDateRange($dateTimeFrom, $dateTimeTo)
     {
-        $jobs =  $this->client->get(
+        $jobs = $this->client->get(
             'api/jobsearch/ids',
-            array('date_time_from'=>$dateTimeFrom, 'date_time_to'=>$dateTimeTo)
+            array('date_time_from' => $dateTimeFrom, 'date_time_to' => $dateTimeTo)
         )->json();
         return $this->checkPropertyAndReturn($jobs, 'jobs');
     }
@@ -138,7 +148,7 @@ class Geopal
      */
     public function getEmployeesList()
     {
-        $employees =  $this->client->get('api/employees/all')->json();
+        $employees = $this->client->get('api/employees/all')->json();
         return $this->checkPropertyAndReturn($employees, 'employee');
     }
 
@@ -148,7 +158,7 @@ class Geopal
      */
     public function getJobTemplates()
     {
-        $jobTemplates =  $this->client->get('api/jobtemplates/all')->json();
+        $jobTemplates = $this->client->get('api/jobtemplates/all')->json();
         return $this->checkPropertyAndReturn($jobTemplates, 'job_templates');
     }
 
@@ -159,7 +169,7 @@ class Geopal
      */
     public function getJobTemplateById($template_id)
     {
-        $jobTemplates =  $this->client->get('api/jobtemplates/get', array('template_id'=>$template_id))->json();
+        $jobTemplates = $this->client->get('api/jobtemplates/get', array('template_id' => $template_id))->json();
         return $this->checkPropertyAndReturn($jobTemplates, 'job_template');
     }
 }

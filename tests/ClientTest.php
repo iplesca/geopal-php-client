@@ -1,5 +1,5 @@
 <?php
-namespace Geoapl\Tests;
+namespace Geopal\Tests;
 
 use Geopal\Http\Client as GeoPalClient;
 use Guzzle\Http\Client as GuzzleClient;
