@@ -50,7 +50,7 @@ class Geopal
     protected function checkPropertyAndReturn($array, $key)
     {
         if (is_array($array) && array_key_exists($key, $array) && array_key_exists('status', $array)) {
-            if ($array['success'] == true) {
+            if ($array['status'] == true) {
                 return $array[$key];
             } else {
                 throw new GeopalException($array['error_message'], $array['error_code']);

@@ -3,7 +3,6 @@ namespace Geopal\Tests;
 
 use Geopal\Geopal;
 use Geopal\Http\Client;
-use Geopal\Exceptions\GeopalException;
 
 class GeopalMock extends Geopal
 {
@@ -53,6 +52,7 @@ class GeopalMock extends Geopal
     public function getJobById($jobId)
     {
         $jobs =  array(
+            'status' => true,
             'job' => array(
                 'id' => $jobId,
                 'url' =>'',
@@ -74,6 +74,7 @@ class GeopalMock extends Geopal
     {
         if ($dateTimeFrom && $dateTimeTo) {
             $jobs =  array(
+                'status' => true,
                 'jobs' => array(
                     array('id'=>1),
                     array('id'=>2)
@@ -92,6 +93,7 @@ class GeopalMock extends Geopal
     public function getEmployeesList()
     {
         $employees = array(
+            'status' => true,
             'employee' => array(
                 'id' => 2,
                 'title' => '',
@@ -109,6 +111,7 @@ class GeopalMock extends Geopal
     public function getJobTemplates()
     {
         $jobTemplates = array(
+            'status' => true,
             'job_templates' => array(
                 array(
                     'job_template_id' => 29,
@@ -136,6 +139,7 @@ class GeopalMock extends Geopal
     public function getJobTemplateById($template_id)
     {
         $jobTemplates = array(
+            'status' => true,
             'job_template' => array(
                 'id' => $template_id,
                 'name' => null,
