@@ -112,6 +112,7 @@ class Geopal
     /**
      * @param $template_id
      * @return array|bool|float|int|string
+     * @throws Exceptions\GeopalException
      */
     public function createAndAssignJob($template_id)
     {
@@ -122,6 +123,7 @@ class Geopal
     /**
      * @param $jobId
      * @return mixed
+     *  @throws Exceptions\GeopalException
      */
     public function getJobById($jobId)
     {
@@ -133,6 +135,7 @@ class Geopal
      * @param $dateTimeFrom
      * @param $dateTimeTo
      * @return mixed
+     * @throws Exceptions\GeopalException
      */
     public function getJobsBetweenDateRange($dateTimeFrom, $dateTimeTo)
     {
@@ -145,6 +148,7 @@ class Geopal
 
     /**
      * @return mixed
+     * @throws Exceptions\GeopalException
      */
     public function getEmployeesList()
     {
@@ -155,6 +159,7 @@ class Geopal
     /**
      * gets job templates
      * @return mixed
+     * @throws Exceptions\GeopalException
      */
     public function getJobTemplates()
     {
@@ -166,6 +171,7 @@ class Geopal
      * gets job template by id
      * @param $template_id
      * @return mixed
+     * @throws Exceptions\GeopalException
      */
     public function getJobTemplateById($template_id)
     {
