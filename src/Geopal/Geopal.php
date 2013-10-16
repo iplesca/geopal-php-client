@@ -178,4 +178,48 @@ class Geopal
         $jobTemplates = $this->client->get('api/jobtemplates/get', array('template_id' => $template_id))->json();
         return $this->checkPropertyAndReturn($jobTemplates, 'job_template');
     }
+
+
+    /**
+     * creates an employee
+     *
+     * @param $username
+     * @param $password
+     * @param $identifier
+     * @param $email
+     * @param $mobileNumber
+     * @param $firstName
+     * @param $lastName
+     * @param bool $mobileEmployee
+     * @param bool $webEmployee
+     * @return mixed
+     * @throws Exceptions\GeopalException
+     */
+    public function createEmployee(
+        $username,
+        $password,
+        $identifier,
+        $email,
+        $mobileNumber,
+        $firstName,
+        $lastName,
+        $mobileEmployee = true,
+        $webEmployee = false
+    ) {
+        $employee = $this->client->post(
+            'api/employees/create',
+            array(
+                'username' => $username,
+                'password' => $password,
+                'identifier' => $identifier,
+                'email' => $email,
+                'mobile_number' => $mobileNumber,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'mobile_user' => $mobileEmployee,
+                'web_user' => $webEmployee
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($employee, 'employee_data');
+    }
 }
