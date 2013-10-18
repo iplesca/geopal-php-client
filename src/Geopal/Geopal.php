@@ -55,6 +55,8 @@ class Geopal
             } else {
                 throw new GeopalException($array['error_message'], $array['error_code']);
             }
+        } elseif (is_array($array) && array_key_exists('status', $array)) {
+            throw new GeopalException($array['error_message'], $array['error_code']);
         } else {
             throw new GeopalException('Invalid data or key not found');
         }
@@ -123,7 +125,7 @@ class Geopal
     /**
      * @param $jobId
      * @return mixed
-     *  @throws Exceptions\GeopalException
+     * @throws Exceptions\GeopalException
      */
     public function getJobById($jobId)
     {
@@ -205,7 +207,8 @@ class Geopal
         $lastName,
         $mobileEmployee = true,
         $webEmployee = false
-    ) {
+    )
+    {
         $employee = $this->client->post(
             'api/employees/create',
             array(
