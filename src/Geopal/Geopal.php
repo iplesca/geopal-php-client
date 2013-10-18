@@ -248,6 +248,7 @@ class Geopal
 
     /**
      * @param $identifier
+     * @param $name
      * @param $assetTemplateId
      * @param $assetStatusId
      * @param $addressLine1
@@ -263,6 +264,7 @@ class Geopal
      */
     public function replaceAsset(
         $identifier,
+        $name,
         $assetTemplateId,
         $assetStatusId,
         $addressLine1,
@@ -277,7 +279,8 @@ class Geopal
         $employee = $this->client->post(
             'api/assets/replace',
             array(
-                'identifier' => $identifier,
+                'asset_identifier' => $identifier,
+                'asset_name' => $name,
                 'asset_template_id' => $assetTemplateId,
                 'asset_status_id' => $assetStatusId,
                 'address_line_1' => $addressLine1,
