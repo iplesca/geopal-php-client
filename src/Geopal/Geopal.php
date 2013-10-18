@@ -300,7 +300,7 @@ class Geopal
      * @param $addressPostalCode
      * @param $addressLat
      * @param $addressLng
-     * @param array $fields
+     * @param array $params
      * @return mixed
      * @throws Exceptions\GeopalException
      */
@@ -316,26 +316,28 @@ class Geopal
         $addressPostalCode,
         $addressLat,
         $addressLng,
-        $fields = array()
+        $params = array()
     ) {
         $employee = $this->client->post(
             'api/assets/replace',
-            array(
-                'asset_identifier' => $identifier,
-                'asset_name' => $name,
-                'asset_template_id' => $assetTemplateId,
-                'asset_company_status_id' => $assetStatusId,
-                'address_line_1' => $addressLine1,
-                'address_line_2' => $addressLine2,
-                'address_line_3' => $addressLine3,
-                'address_city' => $addressCity,
-                'address_postal_code' => $addressPostalCode,
-                'address_lat' => $addressLat,
-                'address_lng' => $addressLng,
-                'updated_on' => time(),
-                'created_on' => time(),
-                'address_updated_on' => time(),
-                'asset_fields' => json_encode($fields)
+            array_merge(
+                array(
+                    'asset_identifier' => $identifier,
+                    'asset_name' => $name,
+                    'asset_template_id' => $assetTemplateId,
+                    'asset_company_status_id' => $assetStatusId,
+                    'address_line_1' => $addressLine1,
+                    'address_line_2' => $addressLine2,
+                    'address_line_3' => $addressLine3,
+                    'address_city' => $addressCity,
+                    'address_postal_code' => $addressPostalCode,
+                    'address_lat' => $addressLat,
+                    'address_lng' => $addressLng,
+                    'updated_on' => time(),
+                    'created_on' => time(),
+                    'address_updated_on' => time()
+                ),
+                $params
             )
         )->json();
         return $this->checkPropertyAndReturn($employee, 'asset');
