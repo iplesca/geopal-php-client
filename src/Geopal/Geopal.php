@@ -153,7 +153,7 @@ class Geopal
     public function getEmployeesList()
     {
         $employees = $this->client->get('api/employees/all')->json();
-        return $this->checkPropertyAndReturn($employees, 'employee');
+        return $this->checkPropertyAndReturn($employees, 'employees');
     }
 
     /**
