@@ -282,7 +282,7 @@ class Geopal
                 'asset_identifier' => $identifier,
                 'asset_name' => $name,
                 'asset_template_id' => $assetTemplateId,
-                'asset_status_id' => $assetStatusId,
+                'asset_company_status_id' => $assetStatusId,
                 'address_line_1' => $addressLine1,
                 'address_line_2' => $addressLine2,
                 'address_line_3' => $addressLine3,
@@ -292,6 +292,7 @@ class Geopal
                 'address_lng' => $addressLng,
                 'updated_on' => time(),
                 'created_on' => time(),
+                'address_updated_on' => time(),
                 'asset_fields' => json_encode($fields)
             )
         )->json();
