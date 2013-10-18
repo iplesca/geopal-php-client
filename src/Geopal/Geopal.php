@@ -243,4 +243,52 @@ class Geopal
         )->json();
         return $this->checkPropertyAndReturn($employee, 'asset');
     }
+
+
+
+    /**
+     * @param $identifier
+     * @param $assetTemplateId
+     * @param $assetStatusId
+     * @param $addressLine1
+     * @param $addressLine2
+     * @param $addressLine3
+     * @param $addressCity
+     * @param $addressPostalCode
+     * @param $addressLat
+     * @param $addressLng
+     * @return mixed
+     * @throws Exceptions\GeopalException
+     */
+    public function replaceAsset(
+        $identifier,
+        $assetTemplateId,
+        $assetStatusId,
+        $addressLine1,
+        $addressLine2,
+        $addressLine3,
+        $addressCity,
+        $addressPostalCode,
+        $addressLat,
+        $addressLng
+    ) {
+        $employee = $this->client->post(
+            'api/assets/replace',
+            array(
+                'identifier' => $identifier,
+                'asset_template_id' => $assetTemplateId,
+                'asset_status_id' => $assetStatusId,
+                'address_line_1' => $addressLine1,
+                'address_line_2' => $addressLine2,
+                'address_line_3' => $addressLine3,
+                'address_city' => $addressCity,
+                'address_postal_code' => $addressPostalCode,
+                'address_lat' => $addressLat,
+                'address_lng' => $addressLng,
+                'updated_on' => time(),
+                'created_on' => time(),
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($employee, 'asset');
+    }
 }
