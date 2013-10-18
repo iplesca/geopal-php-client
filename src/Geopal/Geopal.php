@@ -222,4 +222,22 @@ class Geopal
         )->json();
         return $this->checkPropertyAndReturn($employee, 'employee_data');
     }
+
+
+    /**
+     * gets an asset by identifier
+     *
+     * @param $identifier
+     * @return mixed
+     */
+    public function getAssetByIdentifier($identifier)
+    {
+        $employee = $this->client->get(
+            'api/assets/getbyidentifier',
+            array(
+                'asset_identifier' => $identifier
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($employee, 'asset');
+    }
 }
