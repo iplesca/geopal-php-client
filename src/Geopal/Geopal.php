@@ -235,13 +235,13 @@ class Geopal
      */
     public function getAssetByIdentifier($identifier)
     {
-        $employee = $this->client->get(
+        $asset = $this->client->get(
             'api/assets/getbyidentifier',
             array(
                 'asset_identifier' => $identifier
             )
         )->json();
-        return $this->checkPropertyAndReturn($employee, 'asset');
+        return $this->checkPropertyAndReturn($asset, 'asset');
     }
 
 
