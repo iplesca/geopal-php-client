@@ -25,10 +25,10 @@ class GeopalMock extends Geopal
 
 
     /**
-     * @param $template_id
+     * @param $templateId
      * @return array|bool|float|int|string
      */
-    public function createAndAssignJob($template_id)
+    public function createAndAssignJob($templateId)
     {
         $job = array(
             'status' => true,
@@ -38,7 +38,7 @@ class GeopalMock extends Geopal
             'job' => array(
                 'id' => 1,
                 'job_template' => array(
-                    'id' => $template_id
+                    'id' => $templateId
                 )
             )
         );
@@ -133,15 +133,15 @@ class GeopalMock extends Geopal
 
     /**
      * gets job template by id
-     * @param $template_id
+     * @param $templateId
      * @return mixed
      */
-    public function getJobTemplateById($template_id)
+    public function getJobTemplateById($templateId)
     {
         $jobTemplates = array(
             'status' => true,
             'job_template' => array(
-                'id' => $template_id,
+                'id' => $templateId,
                 'name' => null,
                 'is_deleted' => false,
                 'updated_on' => date('Y-m-d H:i:s', time())

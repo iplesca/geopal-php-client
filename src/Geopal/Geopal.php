@@ -7,6 +7,7 @@ namespace Geopal;
 
 use Geopal\Http\Client;
 use Geopal\Exceptions\GeopalException;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class Geopal
@@ -112,13 +113,54 @@ class Geopal
     }
 
     /**
-     * @param $template_id
+     * @param $templateId
+     * @param array $params
      * @return array|bool|float|int|string
      * @throws Exceptions\GeopalException
      */
-    public function createAndAssignJob($template_id)
+    public function createAndAssignJob($templateId, array $params = array())
     {
-        $job = $this->client->post('api/jobs/createandassign', array('template_id' => $template_id))->json();
+        $job = $this->client->post(
+            'api/jobs/createandassign',
+            array_merge(array('template_id' => $templateId), $params)
+        )->json();
+        return $this->checkPropertyAndReturn($job, 'job');
+    }
+
+
+    /**
+     * @param $templateId
+     * @param array $params
+     * @return array|bool|float|int|string
+     * @throws Exceptions\GeopalException
+     */
+    public function createJob($templateId, array $params = array())
+    {
+        $job = $this->client->post(
+            'api/jobs/create',
+            array_merge(array('template_id' => $templateId), $params)
+        )->json();
+        return $this->checkPropertyAndReturn($job, 'job');
+    }
+
+
+    /**
+     * @param $jobId
+     * @param \DateTime $startDateTime
+     * @param $assignedToEmployeeId
+     * @return array|bool|float|int|string
+     * @throws Exceptions\GeopalException
+     */
+    public function assignJob($jobId, $startDateTime, $assignedToEmployeeId)
+    {
+        $job = $this->client->post(
+            'api/jobs/assign',
+            array(
+                'job_id' => $jobId,
+                'start_date_time' => $startDateTime->format('Y-m-d H:i:s'),
+                'employee_id' => $assignedToEmployeeId
+            )
+        )->json();
         return $this->checkPropertyAndReturn($job, 'job');
     }
 
@@ -171,13 +213,13 @@ class Geopal
 
     /**
      * gets job template by id
-     * @param $template_id
+     * @param $templateId
      * @return mixed
      * @throws Exceptions\GeopalException
      */
-    public function getJobTemplateById($template_id)
+    public function getJobTemplateById($templateId)
     {
-        $jobTemplates = $this->client->get('api/jobtemplates/get', array('template_id' => $template_id))->json();
+        $jobTemplates = $this->client->get('api/jobtemplates/get', array('template_id' => $templateId))->json();
         return $this->checkPropertyAndReturn($jobTemplates, 'job_template');
     }
 
