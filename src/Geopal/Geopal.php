@@ -257,6 +257,7 @@ class Geopal
      * @param $addressPostalCode
      * @param $addressLat
      * @param $addressLng
+     * @param array $fields
      * @return mixed
      * @throws Exceptions\GeopalException
      */
@@ -270,7 +271,8 @@ class Geopal
         $addressCity,
         $addressPostalCode,
         $addressLat,
-        $addressLng
+        $addressLng,
+        $fields = array()
     ) {
         $employee = $this->client->post(
             'api/assets/replace',
@@ -287,6 +289,7 @@ class Geopal
                 'address_lng' => $addressLng,
                 'updated_on' => time(),
                 'created_on' => time(),
+                'asset_fields' => json_encode($fields)
             )
         )->json();
         return $this->checkPropertyAndReturn($employee, 'asset');
