@@ -249,8 +249,7 @@ class Geopal
         $lastName,
         $mobileEmployee = true,
         $webEmployee = false
-    )
-    {
+    ) {
         $employee = $this->client->post(
             'api/employees/create',
             array(
@@ -341,5 +340,90 @@ class Geopal
             )
         )->json();
         return $this->checkPropertyAndReturn($employee, 'asset');
+    }
+
+    /**
+     * @param string $identifier
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     * @param string $emailAlternate
+     * @param string $faxNumber
+     * @param string $phoneNumber
+     * @param string $phoneNumberAlternate
+     * @param string $mobileNumber
+     * @param string $personTypeName
+     * @param string $personJobTitleName
+     * @param string $personDepartmentName
+     * @param bool $isDeleted
+     * @param array $params
+     * @return mixed
+     */
+    public function replacePerson(
+        $identifier,
+        $firstName,
+        $lastName,
+        $email = '',
+        $emailAlternate = '',
+        $faxNumber = '',
+        $phoneNumber = '',
+        $phoneNumberAlternate = '',
+        $mobileNumber = '',
+        $personTypeName = '',
+        $personJobTitleName = '',
+        $personDepartmentName = '',
+        $isDeleted = false,
+        $params = array()
+    ) {
+        $contact = $this->client->post(
+            'api/people/replace',
+            array_merge(
+                array(
+                    'identifier' => $identifier,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'email' => $email,
+                    'email_alternate' => $emailAlternate,
+                    'fax_number' => $faxNumber,
+                    'phone_number' => $phoneNumber,
+                    'phone_number_alternate' => $phoneNumberAlternate,
+                    'mobile_number' => $mobileNumber,
+                    'person_type_name' => $personTypeName,
+                    'person_job_title_name' => $personJobTitleName,
+                    'person_department_name' => $personDepartmentName,
+                    'is_deleted' => $isDeleted
+                ),
+                $params
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($contact, 'person');
+    }
+
+    /**
+     * Valid status id's are:
+     *
+     * 1 for “Accepted”
+     * 2 for “Rejected”
+     * 3 for “Completed”
+     * 5 for “In Progress”
+     * 7 for “Incomplete”
+     *
+     * @param int $jobId
+     * @param int $newStatusId
+     * @param string $message
+     * @return mixed
+     */
+    public function updateJobStatus($jobId, $newStatusId, $message = '')
+    {
+        $job = $this->client->post(
+            'api/jobs/status',
+            array(
+                'job_id' => $jobId,
+                'job_status_id' => $newStatusId,
+                'message' => $message,
+                'updated_on' => time()
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($job, 'job');
     }
 }
