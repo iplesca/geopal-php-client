@@ -402,7 +402,7 @@ class Geopal
     /**
      * Valid status id's are:
      *
-     * 1 for “Accepted”
+     * 6 for “Accepted”
      * 2 for “Rejected”
      * 3 for “Completed”
      * 5 for “In Progress”
@@ -426,4 +426,23 @@ class Geopal
         )->json();
         return $this->checkPropertyAndReturn($job, 'job');
     }
+    
+    /**
+	 * Finds an employee based on her username and password
+	 *
+	 * @param string $username
+	 * @param string $password
+	 * @return mixed
+	 */
+	public function getEmployeeByCredentials($username, $password)
+	{
+		$employee = $this->client->post(
+			'api/employees/getbycredentials',
+			array(
+				'username' => $username,
+				'password' => $password
+			)
+		)->json();
+		return $this->checkPropertyAndReturn($employee, 'employee_data');
+	}
 }
