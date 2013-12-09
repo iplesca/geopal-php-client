@@ -428,21 +428,21 @@ class Geopal
     }
     
     /**
-	 * Finds an employee based on her username and password
-	 *
-	 * @param string $username
-	 * @param string $password
-	 * @return mixed
-	 */
-	public function getEmployeeByCredentials($username, $password)
-	{
-		$employee = $this->client->post(
-			'api/employees/getbycredentials',
-			array(
-				'username' => $username,
-				'password' => $password
-			)
-		)->json();
-		return $this->checkPropertyAndReturn($employee, 'employee_data');
-	}
+     * Finds an employee based on her username and password
+     *
+     * @param string $username
+     * @param string $password
+     * @return mixed
+     */
+    public function getEmployeeByCredentials($username, $password)
+    {
+        $employee = $this->client->post(
+            'api/employees/getbycredentials',
+            array(
+                'username' => $username,
+                'password' => $password
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($employee, 'employee_data');
+    }
 }
