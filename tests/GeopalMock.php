@@ -47,6 +47,30 @@ class GeopalMock extends Geopal
 
     /**
      * @param $jobId
+     * @param $employeeReassignedToId
+     * @param $startDateTime
+     * @return array|bool|float|int|string
+     */
+    public function reassignJob($jobId, $employeeReassignedToId, $startDateTime)
+    {
+        $job = array(
+            'status' => true,
+            'tag' => '',
+            'employee' => array(),
+            'company' => array(),
+            'job' => array(
+                'id' => $jobId,
+                'assigned_to' => array(
+                    'id' => $employeeReassignedToId
+                ),
+                'start_date' => $startDateTime
+            )
+        );
+        return $this->checkPropertyAndReturn($job, 'job');
+    }
+
+    /**
+     * @param $jobId
      * @return mixed
      */
     public function getJobById($jobId)
@@ -148,5 +172,68 @@ class GeopalMock extends Geopal
             )
         );
         return $this->checkPropertyAndReturn($jobTemplates, 'job_template');
+    }
+
+    /**
+     * @param $id
+     * @param $username
+     * @param $password
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param array $params
+     * @return mixed
+     */
+    public function updateEmployeeById($id, $username, $password, $firstName, $lastName, $email, $params = array())
+    {
+        $employee = array(
+            'status' => true,
+            'employee_data' => array_merge(
+                array(
+                    'id' => $id,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'email' => $email
+                ),
+                $params
+            )
+        );
+        return $this->checkPropertyAndReturn($employee, 'employee_data');
+    }
+
+    /**
+     * @param $identifier
+     * @param $username
+     * @param $password
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param array $params
+     * @return mixed
+     */
+    public function updateEmployeeByIdentifier(
+        $identifier,
+        $username,
+        $password,
+        $firstName,
+        $lastName,
+        $email,
+        $params = array()
+    ){
+        $employee = array(
+            'status' => true,
+            'employee_data' => array_merge(
+                array(
+                    'identifier' => $identifier,
+                    'username' => $username,
+                    'password' => $password,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'email' => $email
+                ),
+                $params
+            )
+        );
+        return $this->checkPropertyAndReturn($employee, 'employee_data');
     }
 }

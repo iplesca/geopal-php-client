@@ -188,6 +188,33 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * tests testReassignJob() with json output
+     */
+    public function testReassignJob()
+    {
+        $employeeReassignedToId = 1;
+        $startDateTime = date('Y-m-d H:i:s');
+        $job = $this->geoPal->reassignJob($this->jobId, $employeeReassignedToId, $startDateTime);
+
+        $this->assertEquals(
+            true,
+            is_array($job)
+        );
+        $this->assertEquals(
+            $this->jobId,
+            $job['id']
+        );
+        $this->assertEquals(
+            $$employeeReassignedToId,
+            $job['assigned_to']['id']
+        );
+        $this->assertEquals(
+            $startDateTime,
+            $job['start_date']
+        );
+    }
+
+    /**
      * tests testGetJobById() with json output
      */
     public function testGetJobById()
@@ -234,6 +261,46 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $this->getEmployeeId(),
             $employees['id']
+        );
+    }
+
+    public function testUpdateEmployeeById()
+    {
+        $username = 'username';
+        $password = 'password';
+        $firstName = 'FirstName';
+        $lastName = 'LastName';
+        $email = 'fake@ema.il';
+
+        $employeeData = $this->geoPal->updateEmployeeById(
+            $this->employeeId,
+            $username,
+            $password,
+            $firstName,
+            $lastName,
+            $email,
+            array()
+        );
+
+        $this->assertEquals(
+            true,
+            is_array($employeeData)
+        );
+        $this->assertEquals(
+            $this->employeeId,
+            $employeeData['id']
+        );
+        $this->assertEquals(
+            $username,
+            $employeeData['first_name']
+        );
+        $this->assertEquals(
+            '',
+            ''
+        );
+        $this->assertEquals(
+            '',
+            ''
         );
     }
 }

@@ -7,7 +7,6 @@ namespace Geopal;
 
 use Geopal\Http\Client;
 use Geopal\Exceptions\GeopalException;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class Geopal
@@ -159,6 +158,27 @@ class Geopal
                 'job_id' => $jobId,
                 'start_date_time' => $startDateTime->format('Y-m-d H:i:s'),
                 'employee_id' => $assignedToEmployeeId
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($job, 'job');
+    }
+
+    /**
+     * Reassigns a job to another employee
+     *
+     * @param $jobId
+     * @param $employeeReassignedToId
+     * @param \DateTime $startDateTime
+     * @return mixed
+     */
+    public function reassignJob($jobId, $employeeReassignedToId, $startDateTime)
+    {
+        $job = $this->client->post(
+            'api/jobs/reassign',
+            array(
+                'job_id' => $jobId,
+                'employee_reassigned_to_id' => $employeeReassignedToId,
+                'start_date_time' => $startDateTime->format('Y-m-d H:i:s')
             )
         )->json();
         return $this->checkPropertyAndReturn($job, 'job');
@@ -441,6 +461,75 @@ class Geopal
             array(
                 'username' => $username,
                 'password' => $password
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($employee, 'employee_data');
+    }
+
+    /**
+     * Updates details of an employee
+     *
+     * @param $id
+     * @param $username
+     * @param $password
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param array $params
+     * @return mixed
+     */
+    public function updateEmployeeById($id, $username, $password, $firstName, $lastName, $email, $params = array())
+    {
+        $employee = $this->client->post(
+            'api/employees/update',
+            array_merge(
+                array(
+                    'id' => $id,
+                    'username' => $username,
+                    'password' => $password,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'email' => $email
+                ),
+                $params
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($employee, 'employee_data');
+    }
+
+    /**
+     * Updates details of an employee based on her identifier
+     *
+     * @param $identifier
+     * @param $username
+     * @param $password
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param array $params
+     * @return mixed
+     */
+    public function updateEmployeeByIdentifier(
+        $identifier,
+        $username,
+        $password,
+        $firstName,
+        $lastName,
+        $email,
+        $params = array()
+    ){
+        $employee = $this->client->post(
+            'api/employees/updatebyidentifier',
+            array_merge(
+                array(
+                    'identifier' => $identifier,
+                    'username' => $username,
+                    'password' => $password,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'email' => $email
+                ),
+                $params
             )
         )->json();
         return $this->checkPropertyAndReturn($employee, 'employee_data');
