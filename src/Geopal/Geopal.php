@@ -289,6 +289,27 @@ class Geopal
 
 
     /**
+     * gets all assets
+     *
+     * @param int $limit
+     * @param int $page
+     * @param int $updatedOn    // This should be a valid unix timestamp or null
+     * @return mixed
+     */
+    public function getAllAssets($limit = 10, $page = 0, $updatedOn = null)
+    {
+        $params = array('limit' => $limit, 'page' => $page);
+
+        if (!is_null($updatedOn) && is_numeric($updatedOn)) {
+            $params['updatedOn'] = intval($updatedOn);
+        }
+
+        $assets = $this->client->get('api/assets/getall', $params)->json();
+        return $this->checkPropertyAndReturn($assets, 'assets');
+    }
+
+
+    /**
      * gets an asset by identifier
      *
      * @param $identifier
