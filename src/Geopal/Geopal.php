@@ -385,6 +385,68 @@ class Geopal
 
     /**
      * @param string $identifier
+     * @param string $name
+     * @param string $customerTypeName
+     * @param string $industry
+     * @param string $annualRevenue
+     * @param string $email
+     * @param string $emailAlternate
+     * @param string $fax
+     * @param string $phoneOffice
+     * @param string $phoneAlternate
+     * @param string $website
+     * @param string $employees
+     * @param bool $isDeleted
+     * @param array $address
+     * @param array $customerExtraFields
+     * @param array $customerFields
+     * @return mixed
+     */
+    public function replaceCustomer(
+        $identifier,
+        $name = '',
+        $customerTypeName = '',
+        $industry = '',
+        $annualRevenue = '',
+        $email = '',
+        $emailAlternate = '',
+        $fax = '',
+        $phoneOffice = '',
+        $phoneAlternate = '',
+        $website = '',
+        $employees = '',
+        $isDeleted = false,
+        $address = array(),
+        $customerExtraFields = array(),
+        $customerFields = array()
+    ) {
+        $customer = $this->client->post(
+            'api/customers/replace',
+            array(
+                'identifier' => $identifier,
+                'name' => $name,
+                'customer_type_name' => $customerTypeName,
+                'industry' => $industry,
+                'annual_revenue' => $annualRevenue,
+                'email' => $email,
+                'email_alternate' => $emailAlternate,
+                'fax' => $fax,
+                'phone_office' => $phoneOffice,
+                'phone_alternate' => $phoneAlternate,
+                'website' => $website,
+                'employees' => $employees,
+                'is_deleted' => $isDeleted,
+                'address' => $address,
+                'customer_extra_fields' => $customerExtraFields,
+                'customer_fields' => $customerFields
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($customer, 'customer');
+    }
+
+
+    /**
+     * @param string $identifier
      * @param string $firstName
      * @param string $lastName
      * @param string $email
@@ -439,6 +501,7 @@ class Geopal
         )->json();
         return $this->checkPropertyAndReturn($contact, 'person');
     }
+
 
     /**
      * Valid status id's are:
