@@ -33,12 +33,13 @@ class Geopal
     /**
      * @param $employeeId
      * @param $privateKey
+     * @param $apiUrl
      */
-    public function __construct($employeeId, $privateKey)
+    public function __construct($employeeId, $privateKey, $apiUrl = null)
     {
         $this->setEmployeeId($employeeId);
         $this->setPrivateKey($privateKey);
-        $this->client = new Client($this->getEmployeeId(), $this->getPrivateKey());
+        $this->client = new Client($this->getEmployeeId(), $this->getPrivateKey(), null, $apiUrl);
     }
 
     /**
@@ -293,7 +294,7 @@ class Geopal
      *
      * @param int $limit
      * @param int $page
-     * @param int $updatedOn    // This should be a valid unix timestamp or null
+     * @param int $updatedOn // This should be a valid unix timestamp or null
      * @return mixed
      */
     public function getAllAssets($limit = 10, $page = 0, $updatedOn = null)
@@ -530,7 +531,7 @@ class Geopal
         )->json();
         return $this->checkPropertyAndReturn($job, 'job');
     }
-    
+
     /**
      * Finds an employee based on her username and password
      *
@@ -617,5 +618,95 @@ class Geopal
             )
         )->json();
         return $this->checkPropertyAndReturn($employee, 'employee_data');
+    }
+
+
+    /**
+     * Gets a list of company files
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function getCompanyFiles()
+    {
+        $companyFileUploadResponse = $this->client->get(
+            'api/companyfiles/all',
+            array()
+        )->json();
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+    }
+
+    /**
+     * Gets a company file by id
+     * @param $companyFileId
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function getCompanyFile($companyFileId)
+    {
+        $companyFileUploadResponse = $this->client->get(
+            'api/companyfiles/get',
+            array(
+                'file_id' => $companyFileId
+            )
+        )->json();
+
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+    }
+
+    /**
+     * Add Company file
+     * @param string $fileName
+     * @param string $fileCategory
+     * @param string $file path to file
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function addCompanyFile($fileName, $fileCategory, $file)
+    {
+        $companyFileUploadResponse = $this->client->post(
+            'api/companyfiles/create',
+            array(
+                'file_name' => $fileName,
+                'file_category' => $fileCategory,
+            ),
+            $file
+        )->json();
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+    }
+
+
+    /**
+     * Update a company file by ID
+     * @param $fileId
+     * @param null|string $newFileName name string to change name, null to use original name
+     * @param null|string $newFileCategory category string to change category, null to use original category
+     * @param null|true $newFile true to update file with uploaded file, null to use original file
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function updateCompanyFile($fileId, $newFileName = null, $newFileCategory = null, $newFile = null)
+    {
+        $companyFileUploadResponse = $this->client->post(
+            'api/companyfiles/update',
+            array(
+                'file_id' => $fileId,
+                'file_name' => $newFileName,
+                'file_category' => $newFileCategory
+            ),
+            $newFile
+        )->json();
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+    }
+
+    /**
+     * Delete a company file by ID
+     * @param $fileId
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function deleteCompanyFile($fileId)
+    {
+        $companyFileUploadResponse = $this->client->post('api/companyfiles/delete',array('file_id' => $fileId))->json();
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
     }
 }
