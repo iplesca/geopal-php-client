@@ -22,21 +22,29 @@ class Client
     private $guzzleClient;
 
     /**
-     * Geopal API Url
+     * Default Geopal API Url
      */
-    const API_URL = 'https://app.geopalsolutions.com/';
+    const DEFAULT_API_URL = 'https://app.geopalsolutions.com/';
+
+    /**
+     * GeoPal API URL
+     * @var null|string
+     */
+    private $apiUrl;
 
     /**
      * @param $employeeId
      * @param $privateKey
      * @param null|\Guzzle\Http\Client $guzzleClient
+     * @param $apiUrl
      */
-    public function __construct($employeeId, $privateKey, $guzzleClient = null)
+    public function __construct($employeeId, $privateKey, $guzzleClient = null, $apiUrl = null)
     {
         $this->employeeId = $employeeId;
         $this->privateKey = $privateKey;
+        $this->apiUrl = is_null($apiUrl) ? self::DEFAULT_API_URL : $apiUrl;
         if (is_null($guzzleClient)) {
-            $this->guzzleClient = new GuzzleClient(self::API_URL);
+            $this->guzzleClient = new GuzzleClient($this->apiUrl);
         } else {
             $this->guzzleClient = $guzzleClient;
         }
@@ -55,11 +63,17 @@ class Client
     /**
      * @param $uri
      * @param array $params
+     * @param string|null $file The file path of the file to upload or null
      * @return \Guzzle\Http\Message\Response
      */
-    public function post($uri, $params = array())
+    public function post($uri, $params = array(), $file = null)
     {
-        return $this->guzzleClient->post($uri, $this->getHeaders('post', $uri), $params)->send();
+        $request = $this->guzzleClient->post($uri, $this->getHeaders('post', $uri), $params);
+        if (!is_null($file) && file_exists($file)) {
+            $request->addPostFile('userfile', $file);
+        }
+        $response =  $request->send();
+        return $response;
     }
 
     /**
