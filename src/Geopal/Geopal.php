@@ -623,6 +623,7 @@ class Geopal
 
     /**
      * Gets a list of company files
+     *
      * @return mixed
      * @throws GeopalException
      */
@@ -637,6 +638,7 @@ class Geopal
 
     /**
      * Gets a company file by id
+     *
      * @param $companyFileId
      * @return mixed
      * @throws GeopalException
@@ -655,6 +657,7 @@ class Geopal
 
     /**
      * Add Company file
+     *
      * @param string $fileName
      * @param string $fileCategory
      * @param string $file path to file
@@ -677,6 +680,7 @@ class Geopal
 
     /**
      * Update a company file by ID
+     *
      * @param $fileId
      * @param null|string $newFileName name string to change name, null to use original name
      * @param null|string $newFileCategory category string to change category, null to use original category
@@ -700,6 +704,7 @@ class Geopal
 
     /**
      * Delete a company file by ID
+     *
      * @param $fileId
      * @return mixed
      * @throws GeopalException
@@ -711,5 +716,22 @@ class Geopal
             array('id' => $fileId)
         )->json();
         return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+    }
+
+
+    /**
+     * Download a company file by ID
+     *
+     * @param $fileId
+     * @return \Guzzle\Http\Message\Response
+     */
+    public function downloadCompanyFile($fileId)
+    {
+        $companyFileUploadResponse = $this->client->get(
+            'api/companyfiles/download',
+            array('id' => $fileId)
+        );
+
+        return $companyFileUploadResponse;
     }
 }
