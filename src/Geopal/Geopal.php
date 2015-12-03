@@ -646,7 +646,7 @@ class Geopal
     public function getCompanyFile($companyFileId)
     {
         $companyFileUploadResponse = $this->client->get(
-            'api/companyfiles/get',
+            'api/companyfile/get',
             array(
                 'id' => $companyFileId
             )
@@ -667,7 +667,7 @@ class Geopal
     public function addCompanyFile($fileName, $fileCategory, $file)
     {
         $companyFileUploadResponse = $this->client->post(
-            'api/companyfiles/create',
+            'api/companyfile/create',
             array(
                 'file_name' => $fileName,
                 'file_category' => $fileCategory,
@@ -691,7 +691,7 @@ class Geopal
     public function updateCompanyFile($fileId, $newFileName = null, $newFileCategory = null, $newFile = null)
     {
         $companyFileUploadResponse = $this->client->post(
-            'api/companyfiles/update',
+            'api/companyfile/update',
             array(
                 'id' => $fileId,
                 'file_name' => $newFileName,
@@ -712,7 +712,7 @@ class Geopal
     public function deleteCompanyFile($fileId)
     {
         $companyFileUploadResponse = $this->client->post(
-            'api/companyfiles/delete',
+            'api/companyfile/delete',
             array('id' => $fileId)
         )->json();
         return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
@@ -728,7 +728,7 @@ class Geopal
     public function downloadCompanyFile($fileId)
     {
         $companyFileUploadResponse = $this->client->get(
-            'api/companyfiles/download',
+            'api/companyfile/download',
             array('id' => $fileId)
         );
 
