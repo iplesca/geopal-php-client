@@ -455,6 +455,104 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($employeeData['email'], $response['email']);
     }
 
+    /**
+     * Test if getCompanyFiles returns correct data on success
+     * @covers \Geopal\Geopal::getCompanyFiles
+     * @dataProvider mockCompanyFileUploadData
+     */
+    public function testGetCompanyFilesSuccess($testData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($testData);
+        $response = $geoPal->getCompanyFiles();
+
+        $this->assertTrue(is_array($response));
+
+        $this->assertArrayHasKey('id', $response);
+        $this->assertArrayHasKey('name', $response);
+        $this->assertArrayHasKey('category', $response);
+        $this->assertArrayHasKey('s3file_id', $response);
+
+        $this->assertEquals($testData['company_file_upload']['id'], $response['id']);
+    }
+
+    /**
+     * Test if getCompanyFile returns correct data on success
+     * @covers \Geopal\Geopal::getCompanyFile
+     * @dataProvider mockCompanyFileUploadData
+     */
+    public function testGetCompanyFile($testData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($testData);
+        $response = $geoPal->getCompanyFile(1064);
+
+        $this->assertTrue(is_array($response));
+
+        $this->assertArrayHasKey('id', $response);
+        $this->assertArrayHasKey('name', $response);
+        $this->assertArrayHasKey('category', $response);
+        $this->assertArrayHasKey('s3file_id', $response);
+
+        $this->assertEquals($testData['company_file_upload']['name'], $response['name']);
+    }
+
+    /**
+     * Test if addCompanyFile returns correct data on success
+     * @covers \Geopal\Geopal::addCompanyFile
+     * @dataProvider mockCompanyFileUploadData
+     */
+    public function testAddCompanyFile($testData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($testData);
+        $response = $geoPal->addCompanyFile(
+            'test4',
+            'Test Category',
+            '/Users/markmccullagh/projects/geopal-php-client/tests/test.txt'
+        );
+
+        $this->assertTrue(is_array($response));
+
+        $this->assertArrayHasKey('id', $response);
+        $this->assertArrayHasKey('name', $response);
+        $this->assertArrayHasKey('category', $response);
+        $this->assertArrayHasKey('s3file_id', $response);
+    }
+
+    /**
+     * Test if updateCompanyFile returns correct data on success
+     * @covers \Geopal\Geopal::updateCompanyFile
+     * @dataProvider mockCompanyFileUploadData
+     */
+    public function testUpdateCompanyFile($testData)
+    {
+        $geopal = $this->getMockedGeoPalObj($testData);
+        $response = $geopal->updateCompanyFile(
+            1064,
+            'test-file-updated.txt',
+            'test_category_updated',
+            '/Users/markmccullagh/projects/geopal-php-client/tests/test.txt'
+        );
+
+        $this->assertTrue(is_array($response));
+
+        $this->assertArrayHasKey('id', $response);
+        $this->assertArrayHasKey('name', $response);
+        $this->assertArrayHasKey('category', $response);
+        $this->assertArrayHasKey('s3file_id', $response);
+    }
+
+    /**
+     * Test if deleteCompanyFile returns correct data on success
+     * @covers \Geopal\Geopal::deleteCompanyFile
+     * @dataProvider mockCompanyFileUploadDeleteData
+     */
+    public function testDeleteCompanyFile($testData)
+    {
+        $geopal = $this->getMockedGeoPalObj($testData);
+        $response = $geopal->deleteCompanyFile(1065);
+
+        $this->assertTrue($response);
+    }
+
 
     /**
      * Mock Data for for job Template
@@ -555,6 +653,58 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
                         ),
                         'start_date' => date('Y-m-d H:i:s', time())
                     )
+                )
+            )
+        );
+    }
+
+    public function mockCompanyFileUploadData()
+    {
+        return array(
+            array(
+                array(
+                    'status' => true,
+                    'company_file_upload' =>
+                        array(
+                            "id" => 1064,
+                            "name" => "test4",
+                            "category" => "test_category",
+                            "company_id" => 2,
+                            "s3file_id" => 41,
+                            "is_deleted" => false,
+                            "updated_on" => "2015-12-01 14:33:26",
+                            "updated_by" => 0,
+                            "created_on" => "2015-12-01 14:33:26",
+                            "created_by" => 0,
+                            "s3file" => array(
+                                "id" => 41,
+                                "uuid" => "cae5d54b-16bd-4b23-93d2-48ef575054af",
+                                "bucket" => "geopalapp",
+                                "file_name" => "2/some-directory/test-file-32.txt",
+                                "mime_type" => "text/plain",
+                                "size" => 20,
+                                "tmp_file_name" => "/some-directory/test-file-32.txt",
+                                "tmp_file_created_on" => "2015-12-01 16:55:46",
+                                "company_id" => 2,
+                                "is_deleted" => false,
+                                "deleted_by" => 0,
+                                "created_by" => 10375,
+                                "created_on" => "2015-12-01 14:33:26",
+                                "updated_on" => "2015-12-01 14:33:26"
+                            )
+                        )
+                )
+            )
+        );
+    }
+
+    public function mockCompanyFileUploadDeleteData()
+    {
+        return array(
+            array(
+                array(
+                    'status' => true,
+                    'company_file_upload' => true
                 )
             )
         );
