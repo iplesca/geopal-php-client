@@ -4,6 +4,9 @@ namespace Geopal\Tests;
 use Geopal\Geopal as GeoPal;
 use Geopal\Http\Client as GeoPalClient;
 use Guzzle\Http\Client as GuzzleClient;
+use Guzzle\Http\EntityBody;
+use Guzzle\Http\Message\Header;
+use Guzzle\Http\Message\Header\HeaderCollection;
 use Guzzle\Plugin\Mock\MockPlugin;
 use Guzzle\Http\Message\Response;
 
@@ -457,12 +460,13 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test if getCompanyFiles returns correct data on success
+     *
      * @covers \Geopal\Geopal::getCompanyFiles
      * @dataProvider mockCompanyFileUploadData
      */
-    public function testGetCompanyFilesSuccess($testData)
+    public function testGetCompanyFiles($mockResponseData)
     {
-        $geoPal = $this->getMockedGeoPalObj($testData);
+        $geoPal = $this->getMockedGeoPalObj($mockResponseData);
         $response = $geoPal->getCompanyFiles();
 
         $this->assertTrue(is_array($response));
@@ -472,17 +476,18 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('category', $response);
         $this->assertArrayHasKey('s3file_id', $response);
 
-        $this->assertEquals($testData['company_file_upload']['id'], $response['id']);
+        $this->assertEquals($mockResponseData['company_file_upload']['id'], $response['id']);
     }
 
     /**
      * Test if getCompanyFile returns correct data on success
+     *
      * @covers \Geopal\Geopal::getCompanyFile
      * @dataProvider mockCompanyFileUploadData
      */
-    public function testGetCompanyFile($testData)
+    public function testGetCompanyFile($mockResponseData)
     {
-        $geoPal = $this->getMockedGeoPalObj($testData);
+        $geoPal = $this->getMockedGeoPalObj($mockResponseData);
         $response = $geoPal->getCompanyFile(1064);
 
         $this->assertTrue(is_array($response));
@@ -492,17 +497,18 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('category', $response);
         $this->assertArrayHasKey('s3file_id', $response);
 
-        $this->assertEquals($testData['company_file_upload']['name'], $response['name']);
+        $this->assertEquals($mockResponseData['company_file_upload']['name'], $response['name']);
     }
 
     /**
      * Test if addCompanyFile returns correct data on success
+     *
      * @covers \Geopal\Geopal::addCompanyFile
      * @dataProvider mockCompanyFileUploadData
      */
-    public function testAddCompanyFile($testData)
+    public function testAddCompanyFile($mockResponseData)
     {
-        $geoPal = $this->getMockedGeoPalObj($testData);
+        $geoPal = $this->getMockedGeoPalObj($mockResponseData);
         $response = $geoPal->addCompanyFile(
             'test4',
             'Test Category',
@@ -519,12 +525,13 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test if updateCompanyFile returns correct data on success
+     *
      * @covers \Geopal\Geopal::updateCompanyFile
      * @dataProvider mockCompanyFileUploadData
      */
-    public function testUpdateCompanyFile($testData)
+    public function testUpdateCompanyFile($mockResponseData)
     {
-        $geopal = $this->getMockedGeoPalObj($testData);
+        $geopal = $this->getMockedGeoPalObj($mockResponseData);
         $response = $geopal->updateCompanyFile(
             1064,
             'test-file-updated.txt',
@@ -542,20 +549,36 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test if deleteCompanyFile returns correct data on success
+     *
      * @covers \Geopal\Geopal::deleteCompanyFile
      * @dataProvider mockCompanyFileUploadDeleteData
      */
-    public function testDeleteCompanyFile($testData)
+    public function testDeleteCompanyFile($mockResponseData)
     {
-        $geopal = $this->getMockedGeoPalObj($testData);
+        $geopal = $this->getMockedGeoPalObj($mockResponseData);
         $response = $geopal->deleteCompanyFile(1065);
 
         $this->assertTrue($response);
     }
 
+    /**
+     * Test if downloadCompanyFile returns correct data on success
+     *
+     * @covers \Geopal\Geopal::downloadCompanyFile
+     * @dataProvider mockCompanyFileUploadDownloadResponse
+     */
+    public function testDownloadCompanyFile($mockResponseData)
+    {
+        $geopal = $this->getMockedGeoPalObj($mockResponseData);
+        $response = $geopal->downloadCompanyFile(1065);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
 
     /**
      * Mock Data for for job Template
+     *
      * @return array
      */
     public function mockJobTemplateData()
@@ -658,6 +681,11 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Mock data for company file upload response's
+     *
+     * @return array
+     */
     public function mockCompanyFileUploadData()
     {
         return array(
@@ -698,6 +726,11 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Mock data for company file upload delete response
+     *
+     * @return array
+     */
     public function mockCompanyFileUploadDeleteData()
     {
         return array(
@@ -710,4 +743,30 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Mock data for company file upload download response
+     *
+     * @return array
+     */
+    public function mockCompanyFileUploadDownloadResponse()
+    {
+        $headers = new HeaderCollection(
+            array(
+                'date' => new Header('Date', array('Thu, 03 Dec 2015 15:42:45 GMT')),
+                'content-disposition' => new Header(
+                    'Content-Disposition',
+                    array('attachment; filename="test-file-32.txt"')
+                ),
+            )
+        );
+        $body = new EntityBody(fopen('/Users/markmccullagh/projects/geopal-php-client/tests/test.txt', 'r'));
+
+        return array(
+            array(
+                array(
+                    new Response(200, $headers, $body)
+                )
+            )
+        );
+    }
 }
