@@ -646,7 +646,7 @@ class Geopal
         $companyFileUploadResponse = $this->client->get(
             'api/companyfiles/get',
             array(
-                'file_id' => $companyFileId
+                'id' => $companyFileId
             )
         )->json();
 
@@ -689,7 +689,7 @@ class Geopal
         $companyFileUploadResponse = $this->client->post(
             'api/companyfiles/update',
             array(
-                'file_id' => $fileId,
+                'id' => $fileId,
                 'file_name' => $newFileName,
                 'file_category' => $newFileCategory
             ),
@@ -706,7 +706,10 @@ class Geopal
      */
     public function deleteCompanyFile($fileId)
     {
-        $companyFileUploadResponse = $this->client->post('api/companyfiles/delete',array('file_id' => $fileId))->json();
+        $companyFileUploadResponse = $this->client->post(
+            'api/companyfiles/delete',
+            array('id' => $fileId)
+        )->json();
         return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
     }
 }
