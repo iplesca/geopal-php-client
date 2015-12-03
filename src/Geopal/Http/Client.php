@@ -70,7 +70,7 @@ class Client
     {
         $request = $this->guzzleClient->post($uri, $this->getHeaders('post', $uri), $params);
         if (!is_null($file) && file_exists($file)) {
-            $request->addPostFile('userfile', $file);
+            $request->addPostFile('file2upload', $file);
         }
         $response =  $request->send();
         return $response;
