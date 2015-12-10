@@ -512,7 +512,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         $response = $geoPal->addCompanyFile(
             'test4',
             'Test Category',
-            '/Users/markmccullagh/projects/geopal-php-client/tests/test.txt'
+            __DIR__. '/test.txt'
         );
 
         $this->assertTrue(is_array($response));
@@ -536,7 +536,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
             1064,
             'test-file-updated.txt',
             'test_category_updated',
-            '/Users/markmccullagh/projects/geopal-php-client/tests/test.txt'
+            __DIR__. '/test.txt'
         );
 
         $this->assertTrue(is_array($response));
@@ -759,7 +759,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $body = new EntityBody(fopen('/Users/markmccullagh/projects/geopal-php-client/tests/test.txt', 'r'));
+        $body = new EntityBody(fopen(__DIR__. '/test.txt', 'r'));
 
         return array(
             array(
