@@ -734,4 +734,103 @@ class Geopal
 
         return $companyFileUploadResponse;
     }
+
+
+    /**
+     * Gets a list of teams
+     *
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function getTeams()
+    {
+        $teamResponse = $this->client->get(
+            'api/teams/all',
+            array()
+        )->json();
+        return $this->checkPropertyAndReturn($teamResponse, 'teams');
+    }
+
+
+    /**
+     * Get a team by its id
+     *
+     * @param int $teamId
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function getTeam($teamId)
+    {
+        $teamResponse = $this->client->get(
+            'api/teams/get',
+            array('id' => $teamId)
+        )->json();
+        return $this->checkPropertyAndReturn($teamResponse, 'teams');
+    }
+
+    /**
+     * Add a team
+     *
+     * @param string $teamName
+     * @param int $quickTemplateId
+     * @param int[] $employeeIds
+     * @param int[] $templateIds
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function addTeam($teamName, $quickTemplateId, $employeeIds, $templateIds)
+    {
+        $teamResponse = $this->client->post(
+            'api/teams/create',
+            array(
+                'name' => $teamName,
+                'job_template_id' => $quickTemplateId,
+                'employees' => $employeeIds,
+                'job_templates' => $templateIds,
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($teamResponse, 'teams');
+    }
+
+    /**
+     * Update a team by id
+     *
+     * @param int $teamId
+     * @param string $teamName
+     * @param int $quickTemplateId
+     * @param int[] $employeeIds
+     * @param int[] $templateIds
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function updateTeam($teamId, $teamName, $quickTemplateId, $employeeIds, $templateIds)
+    {
+        $teamResponse = $this->client->post(
+            'api/teams/update',
+            array(
+                'id' => $teamId,
+                'name' => $teamName,
+                'job_template_id' => $quickTemplateId,
+                'employees' => $employeeIds,
+                'job_templates' => $templateIds,
+            )
+        )->json();
+        return $this->checkPropertyAndReturn($teamResponse, 'teams');
+    }
+
+    /**
+     * Delete a team by id
+     *
+     * @param int $teamId
+     * @return mixed
+     * @throws GeopalException
+     */
+    public function deleteTeam($teamId)
+    {
+        $teamResponse = $this->client->post(
+            'api/companyfile/delete',
+            array('id' => $teamId)
+        )->json();
+        return $this->checkPropertyAndReturn($teamResponse, 'teams');
+    }
 }

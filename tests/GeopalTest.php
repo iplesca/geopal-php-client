@@ -576,6 +576,87 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     }
 
 
+
+    /**
+     * Test the getTeams method returns a valid response
+     * @covers       \Geopal\Geopal::getTeams()
+     * @dataProvider mockTeamData
+     */
+    public function testGetTeams($mockResponseData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($mockResponseData);
+
+        $teamsResponse = $geoPal->getTeams();
+
+        $this->doTeamAssertions($teamsResponse);
+    }
+
+    /**
+     * Test the getTeam method returns a valid response
+     * @covers       \Geopal\Geopal::getTeam()
+     * @dataProvider mockTeamData
+     */
+    public function testGetTeam($mockResponseData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($mockResponseData);
+
+        $teamsResponse = $geoPal->getTeam(1234);
+
+        $this->doTeamAssertions($teamsResponse);
+    }
+
+    /**
+     * Test the addTeam method returns a valid response
+     * @covers       \Geopal\Geopal::addTeam()
+     * @dataProvider mockTeamData
+     */
+    public function testAddTeam($mockResponseData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($mockResponseData);
+
+        $teamsResponse = $geoPal->addTeam(
+            'Test Team Name',
+            1234,
+            array(3,5,8,4),
+            array(33,483,4)
+        );
+
+        $this->doTeamAssertions($teamsResponse);
+    }
+
+    /**
+     * Test the updateTeam method returns a valid response
+     * @covers       \Geopal\Geopal::updateTeam()
+     * @dataProvider mockTeamData
+     */
+    public function testUpdateTeam($mockResponseData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($mockResponseData);
+
+        $teamsResponse = $geoPal->updateTeam(
+            234,
+            'Test Team Name',
+            1234,
+            array(3,5,8,4),
+            array(33,483,4)
+        );
+
+        $this->doTeamAssertions($teamsResponse);
+    }
+
+    /**
+     * Test the deleteTeam method returns a valid response
+     * @covers       \Geopal\Geopal::deleteTeam()
+     * @dataProvider mockTeamDeleteData
+     */
+    public function testDeleteTeam($mockResponseData)
+    {
+        $geopal = $this->getMockedGeoPalObj($mockResponseData);
+        $response = $geopal->deleteTeam(1065);
+
+        $this->assertTrue($response);
+    }
+
     /**
      * Mock Data for for job Template
      *
@@ -726,6 +807,49 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
+    public function mockTeamData()
+    {
+        return array(
+            array(
+                array(
+                    'status' => true,
+                    'teams' => array(
+                        array(
+                            'id' => 1234,
+                            'company_id' => 567,
+                            'name' => 'Team A',
+                            'job_template_id' => 89,
+                            'description' => 'This is Team A',
+                            'updated_on' => date('Y-m-d H:i:s', time()),
+                            'updated_by' => 10,
+                            'created_on' => date('Y-m-d H:i:s', time()),
+                            'created_by' => 11,
+                            'employees' => array(1,2,3,4)
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * Mock data for team delete response
+     *
+     * @return array
+     */
+    public function mockTeamDeleteData()
+    {
+        return array(
+            array(
+                array(
+                    'status' => true,
+                    'teams' => true
+                )
+            )
+        );
+    }
+
     /**
      * Mock data for company file upload delete response
      *
@@ -742,6 +866,8 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+
 
     /**
      * Mock data for company file upload download response
@@ -768,5 +894,27 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
+    }
+
+    /**
+     * Helper function to test team test function response's
+     *
+     * @param $teamsResponse
+     */
+    private function doTeamAssertions($teamsResponse)
+    {
+        $this->assertEquals(true, is_array($teamsResponse));
+
+        $this->assertGreaterThan(0, sizeof($teamsResponse));
+
+        $firstTeam = $teamsResponse[0];
+
+        $this->assertArrayHasKey('id', $firstTeam);
+        $this->assertArrayHasKey('company_id', $firstTeam);
+        $this->assertArrayHasKey('name', $firstTeam);
+        $this->assertArrayHasKey('description', $firstTeam);
+        $this->assertArrayHasKey('employees', $firstTeam);
+
+        $this->assertTrue(is_array($firstTeam['employees']));
     }
 }
