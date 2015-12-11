@@ -762,7 +762,7 @@ class Geopal
     public function getTeam($teamId)
     {
         $teamResponse = $this->client->get(
-            'api/teams/get',
+            'api/team/get',
             array('id' => $teamId)
         )->json();
         return $this->checkPropertyAndReturn($teamResponse, 'teams');
@@ -781,7 +781,7 @@ class Geopal
     public function addTeam($teamName, $quickTemplateId, $employeeIds, $templateIds)
     {
         $teamResponse = $this->client->post(
-            'api/teams/create',
+            'api/team/create',
             array(
                 'name' => $teamName,
                 'job_template_id' => $quickTemplateId,
@@ -806,7 +806,7 @@ class Geopal
     public function updateTeam($teamId, $teamName, $quickTemplateId, $employeeIds, $templateIds)
     {
         $teamResponse = $this->client->post(
-            'api/teams/update',
+            'api/team/update',
             array(
                 'id' => $teamId,
                 'name' => $teamName,
@@ -828,7 +828,7 @@ class Geopal
     public function deleteTeam($teamId)
     {
         $teamResponse = $this->client->post(
-            'api/companyfile/delete',
+            'api/team/delete',
             array('id' => $teamId)
         )->json();
         return $this->checkPropertyAndReturn($teamResponse, 'teams');
