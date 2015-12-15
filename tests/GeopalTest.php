@@ -461,6 +461,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if getCompanyFiles returns correct data on success
      *
+     * @param $mockResponseData
      * @covers \Geopal\Geopal::getCompanyFiles
      * @dataProvider mockCompanyFileUploadData
      */
@@ -482,6 +483,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if getCompanyFile returns correct data on success
      *
+     * @param $mockResponseData
      * @covers \Geopal\Geopal::getCompanyFile
      * @dataProvider mockCompanyFileUploadData
      */
@@ -503,6 +505,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if addCompanyFile returns correct data on success
      *
+     * @param $mockResponseData
      * @covers \Geopal\Geopal::addCompanyFile
      * @dataProvider mockCompanyFileUploadData
      */
@@ -526,6 +529,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if updateCompanyFile returns correct data on success
      *
+     * @param $mockResponseData
      * @covers \Geopal\Geopal::updateCompanyFile
      * @dataProvider mockCompanyFileUploadData
      */
@@ -550,6 +554,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if deleteCompanyFile returns correct data on success
      *
+     * @param $mockResponseData
      * @covers \Geopal\Geopal::deleteCompanyFile
      * @dataProvider mockCompanyFileUploadDeleteData
      */
@@ -564,6 +569,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if downloadCompanyFile returns correct data on success
      *
+     * @param $mockResponseData
      * @covers \Geopal\Geopal::downloadCompanyFile
      * @dataProvider mockCompanyFileUploadDownloadResponse
      */
@@ -579,6 +585,8 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getTeams method returns a valid response
+     *
+     * @param $mockResponseData
      * @covers       \Geopal\Geopal::getTeams()
      * @dataProvider mockTeamData
      */
@@ -593,6 +601,8 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the getTeam method returns a valid response
+     *
+     * @param $mockResponseData
      * @covers       \Geopal\Geopal::getTeam()
      * @dataProvider mockTeamData
      */
@@ -607,6 +617,8 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the addTeam method returns a valid response
+     *
+     * @param $mockResponseData
      * @covers       \Geopal\Geopal::addTeam()
      * @dataProvider mockTeamData
      */
@@ -626,6 +638,8 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the updateTeam method returns a valid response
+     *
+     * @param $mockResponseData
      * @covers       \Geopal\Geopal::updateTeam()
      * @dataProvider mockTeamData
      */
@@ -646,6 +660,8 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the deleteTeam method returns a valid response
+     *
+     * @param $mockResponseData
      * @covers       \Geopal\Geopal::deleteTeam()
      * @dataProvider mockTeamDeleteData
      */
@@ -716,6 +732,7 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test data for jobs
+     *
      * @return array
      */
     public static function mockJobData()
