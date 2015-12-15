@@ -633,7 +633,7 @@ class Geopal
             'api/companyfiles/all',
             array()
         )->json();
-        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_uploads');
     }
 
     /**
@@ -652,7 +652,7 @@ class Geopal
             )
         )->json();
 
-        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_uploads');
     }
 
     /**
@@ -674,7 +674,7 @@ class Geopal
             ),
             $file
         )->json();
-        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_uploads');
     }
 
 
@@ -699,7 +699,7 @@ class Geopal
             ),
             $newFile
         )->json();
-        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_uploads');
     }
 
     /**
@@ -715,7 +715,7 @@ class Geopal
             'api/companyfile/delete',
             array('id' => $fileId)
         )->json();
-        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_upload');
+        return $this->checkPropertyAndReturn($companyFileUploadResponse, 'company_file_uploads');
     }
 
 
