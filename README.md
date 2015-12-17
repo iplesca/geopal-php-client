@@ -1,5 +1,14 @@
 geopal-php-client
 =================
+Change log
+2015-12-15
+0.1.9
+* Added getTeams
+* Added getTeam
+* Added addTeam
+* Added updateTeam
+* Added deleteTeam
+
 
 Change log
 2015-12-10
