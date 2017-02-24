@@ -1,6 +1,7 @@
 <?php
 namespace Geopal\Tests;
 
+use Geopal\Exceptions\GeopalException;
 use Geopal\Geopal as GeoPal;
 use Geopal\Http\Client as GeoPalClient;
 use Guzzle\Http\Client as GuzzleClient;
@@ -162,6 +163,30 @@ class GeopalTest extends \PHPUnit_Framework_TestCase
         return $geoPal;
     }
 
+    /**
+     * tests that an expection is thrown when an invalid method is called
+     * @param array $testData
+     * @dataProvider mockCreateAndAssignJobData
+     * @expectedException \Geopal\Exceptions\GeopalException
+     */
+    public function testNotImplementedMethod(array $testData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($testData);
+
+        $job = $geoPal->notImplemented($this->getTemplateId());
+    }
+    /**
+     * tests that the __call() function handles missing required parameters
+     * @param array $testData
+     * @dataProvider mockCreateAndAssignJobData
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testMandatoryParameterError(array $testData)
+    {
+        $geoPal = $this->getMockedGeoPalObj($testData);
+
+        $geoPal->createAndAssignJob();
+    }
     /**
      * tests the create and assign job method returns a valid response and if the data is updated correctly
      * @covers       \Geopal\Geopal::createAndAssignJob
