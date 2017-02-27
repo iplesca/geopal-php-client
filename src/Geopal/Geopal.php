@@ -1,8 +1,4 @@
 <?php
-
-/**
- *
- */
 namespace Geopal;
 
 use Geopal\Http\Client;
@@ -13,9 +9,9 @@ use Geopal\Exceptions\GeopalException;
  *
  * @package Geopal
  *
- * @method array|bool|float|int|string createAndAssignJob($templateId, array $params)
- * @method array|bool|float|int|string createJob($templateId, array $params)
- * @method array|bool|float|int|string assignJob(\DateTime $startDateTime, $assignedToEmployeeId)
+ * @method mixed createAndAssignJob($templateId, array $params)
+ * @method mixed createJob($templateId, array $params)
+ * @method mixed assignJob(\DateTime $startDateTime, $assignedToEmployeeId)
  * @method mixed reassignJob($jobId, $employeeReassignedToId, \DateTime $startDateTime)
  * @method mixed getJobById($jobId)
  * @method mixed getJobsBetweenDateRange($dateTimeFrom, $dateTimeTo)
