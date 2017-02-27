@@ -327,7 +327,7 @@ class Geopal
             if ($triggerError) {
                 $trace = debug_backtrace();
                 $caller = next($trace);
-                throw new GeopalException(sprintf("Missing parameter `%s` in %s() called from %s:%s.", $paramName, $methodName, $caller['file'], $caller['line']));
+                trigger_error(sprintf("Missing argument `%s` for %s() called in %s on line %s", $paramName, $methodName, $caller['file'], $caller['line']), E_USER_WARNING);
             }
             $idx++;
         }
