@@ -46,15 +46,17 @@ class Geopal
      */
     protected $client;
 
+    protected $onlyExceptions;
     /**
      * @param $employeeId
      * @param $privateKey
      */
-    public function __construct($employeeId, $privateKey)
+    public function __construct($employeeId, $privateKey, $onlyExceptions = false)
     {
         $this->setEmployeeId($employeeId);
         $this->setPrivateKey($privateKey);
         $this->client = new Client($this->getEmployeeId(), $this->getPrivateKey());
+        $this->onlyExceptions = $onlyExceptions;
     }
 
     /**
@@ -268,17 +270,20 @@ class Geopal
      */
     private function getMethodParams($methodName, $expected, $provided)
     {
+//        die(var_dump($expected) . ' !!! ' . var_dump($provided) . "<br>~~<br><br>" . print_r($expected, true) . ' !!! '.print_r($provided, true));
         $result = [];
-        $idx = 0;
 
         foreach ($expected as $key => $defaultValue) {
             $triggerError = false;
 
-            // get the param value, either from the $provided arguments or as a default value
-            if (isset($provided[$idx])) {
-                $paramValue = $provided[$idx];
+            // attempt to guess the param name ( ['jobId'] or [0 => 'jobId'] or ['jobId' => 'someDefault')
+            $paramName = !is_numeric($key) ? $key : $defaultValue;
+
+            // get the param value, either from the $provided arguments
+            if (isset($provided[ $paramName ])) {
+                $paramValue = $provided[ $paramName ];
             } else {
-                // check if a default value is provided
+                // no value received, maybe $defaultValue is actually the default value and not the param name
                 if (is_numeric($key)) {
                     $triggerError = true;
                 } else {
@@ -323,9 +328,12 @@ class Geopal
             if ($triggerError) {
                 $trace = debug_backtrace();
                 $caller = next($trace);
-                trigger_error(sprintf("Missing argument `%s` for %s() called in %s on line %s", $paramName, $methodName, $caller['file'], $caller['line']), E_USER_WARNING);
+                if (!$this->onlyExceptions) {
+                    trigger_error(sprintf("Missing argument `%s` for %s() called in %s on line %s", $paramName, $methodName, $caller['file'], $caller['line']), E_USER_WARNING);
+                } else {
+                    throw new GeopalException(sprintf("Missing argument `%s` for %s()", $paramName, $methodName));
+                }
             }
-            $idx++;
         }
 
         return $result;
@@ -345,7 +353,7 @@ class Geopal
 
         $method = $this->methods[$name];
 
-        $params = $this->getMethodParams($name, $method['params'], $arguments);
+        $params = $this->getMethodParams($name, $method['params'], $arguments[0]);
 
         if (isset($params['_arrayParams'])) {
             $arrayParams = $params['_arrayParams'];
@@ -353,7 +361,6 @@ class Geopal
             unset($params['_arrayParams']);
             $params = array_merge($params, $arrayParams);
         }
-
         $response = $this->client->{$method['verb']}($method['endpoint'], $params)->json();
         return $this->checkPropertyAndReturn($response, $method['property']);
     }
