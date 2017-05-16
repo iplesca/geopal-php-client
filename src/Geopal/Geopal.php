@@ -270,7 +270,6 @@ class Geopal
      */
     private function getMethodParams($methodName, $expected, $provided)
     {
-//        die(var_dump($expected) . ' !!! ' . var_dump($provided) . "<br>~~<br><br>" . print_r($expected, true) . ' !!! '.print_r($provided, true));
         $result = [];
 
         foreach ($expected as $key => $defaultValue) {
@@ -295,27 +294,28 @@ class Geopal
             if (!is_numeric($key)) {
                 $paramName = $key;
 
-                switch ($defaultValue) {
+                switch (true) {
+                    // to fetch the current time() value
                     // for DateTime parameters
-                    case 'datetime' :
+                    case 'datetime' === $defaultValue:
                         if (!$triggerError) {
                             $result[$paramName] = $paramValue->format('Y-m-d H:i:s');
                         }
                         break;
                     // for UNIX timestamp parameters
-                    case 'timestamp' :
+                    case 'timestamp' === $defaultValue:
                         if (!$triggerError) {
                             if (!is_null($paramValue) && is_numeric($paramValue)) {
                                 $result[$paramName] = intval($paramValue);
                             }
                         }
                         break;
-                    // to fetch the current time() value
-                    case 'timenow' :
+                    case 'timenow' === $defaultValue:
                         $result[$paramName] = time();
                         break;
                     default :
                         $result[$paramName] = $paramValue;
+                        break;
                 }
             } else {
                 $paramName = $defaultValue;
