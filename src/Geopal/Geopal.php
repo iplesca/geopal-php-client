@@ -67,9 +67,14 @@ class Geopal
      */
     protected function checkPropertyAndReturn($array, $key)
     {
-        if (is_array($array) && array_key_exists($key, $array) && array_key_exists('status', $array)) {
+        if (is_array($array) && array_key_exists('status', $array)) {
             if ($array['status'] == true) {
-                return $array[$key];
+                if (array_key_exists($key, $array)) {
+                    return $array[$key];
+                } else {
+                    // if key does not exist probably there is no data for it so return everything
+                    return $array;
+                }
             } else {
                 throw new GeopalException($array['error_message'], $array['error_code']);
             }
@@ -259,6 +264,20 @@ class Geopal
     ];
 
     /**
+     * @param string $method HTTP method
+     * @param string $endpoint Geopal API endpoint
+     * @param mixed $params
+     * @return mixed
+     */
+    public function apiEndpoint($method, $endpoint, $params, $subset = '_no-property_')
+    {
+        $response = $this->client->{$method}($endpoint, $params)->json();
+        $result = $this->checkPropertyAndReturn($response, $subset);
+
+        return $result;
+    }
+
+    /**
      * Resolves the parameters array for a method name.
      * Fills with default values or special cases (e.g. time()), triggers errors on missing mandatory parameters.
      *
@@ -347,6 +366,9 @@ class Geopal
      */
     public function __call($name, $arguments)
     {
+        if (0 == count($arguments)) {
+            $arguments[0] = [];
+        }
         if (!isset($this->methods[$name])) {
             throw new GeopalException("API method `$name` is not implemented.");
         }
@@ -362,6 +384,8 @@ class Geopal
             $params = array_merge($params, $arrayParams);
         }
         $response = $this->client->{$method['verb']}($method['endpoint'], $params)->json();
-        return $this->checkPropertyAndReturn($response, $method['property']);
+        $result = $this->checkPropertyAndReturn($response, $method['property']);
+
+        return $result;
     }
 }
